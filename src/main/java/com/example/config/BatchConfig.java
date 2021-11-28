@@ -24,7 +24,7 @@ import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 import com.example.batch.infra.reader.MongoDbCursorItemReader;
 import com.example.batch.reader.ReportConfigFetchCursorStreamForReader;
 import com.example.domain.ReportConfig;
-import com.example.process.ReportConfigProcessor;
+import com.example.processor.ReportConfigProcessor;
 
 import lombok.extern.log4j.Log4j2;
 
