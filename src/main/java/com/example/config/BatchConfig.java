@@ -41,6 +41,9 @@ public class BatchConfig {
 
 	@Value("${jobA.chunkSize}")
 	private int chunkSize;
+	
+	@Value("${jobA.threadPoolSize}")
+	private int threadPoolSize;
 
 	@Autowired
 	private MongoTemplate mongoTemplate;
@@ -52,6 +55,7 @@ public class BatchConfig {
 		log.debug("cursorBatchSize={}", cursorBatchSize);
 		log.debug("pageSize={}", pageSize);
 		log.debug("chunkSize={}", chunkSize);
+		log.debug("threadPoolSize={}", threadPoolSize);
 	}
 
 	@PreDestroy
@@ -102,7 +106,7 @@ public class BatchConfig {
 	@Bean
 	public TaskExecutor batchTaskExecutor() {
 		threadPoolTaskExecutor = new ThreadPoolTaskExecutor();
-		threadPoolTaskExecutor.setCorePoolSize(1);
+		threadPoolTaskExecutor.setCorePoolSize(threadPoolSize);
 		threadPoolTaskExecutor.setThreadGroupName("taskExecutor-batch");
 		return threadPoolTaskExecutor;
 	}

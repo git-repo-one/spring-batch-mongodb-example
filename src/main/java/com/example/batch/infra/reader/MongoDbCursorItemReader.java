@@ -46,7 +46,7 @@ public class MongoDbCursorItemReader<T> extends AbstractPaginatedDataItemReader<
 	@Override
 	protected Iterator<T> doPageRead() {
 
-		List<T> list = new ArrayList<>();
+		List<T> pageOfItems = new ArrayList<>();
 
 		int i = 0;
 
@@ -56,14 +56,14 @@ public class MongoDbCursorItemReader<T> extends AbstractPaginatedDataItemReader<
 
 			T t = cursorIterator.next();
 
-			list.add(t);
+			pageOfItems.add(t);
 
 			if (i == pageSize) {
 
-				return list.iterator();
+				return pageOfItems.iterator();
 			}
 		}
 
-		return list.iterator();
+		return pageOfItems.iterator();
 	}
 }
