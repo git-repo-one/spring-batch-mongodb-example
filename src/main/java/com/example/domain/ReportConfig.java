@@ -16,4 +16,6 @@ public class ReportConfig {
 
 	private String text;
 	private int index;
+	
+	private String updateHash;
 }

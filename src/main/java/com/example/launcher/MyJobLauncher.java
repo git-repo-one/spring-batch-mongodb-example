@@ -32,15 +32,18 @@ public class MyJobLauncher implements CommandLineRunner {
 		//----------------------------------------
 		
 		// 2. insert data
-		for (int i = 1 ; i <= 50 ; i++) {
+		//for (int i = 1 ; i <= 50 ; i++) {
+		for (int i = 17 ; i <= 18 ; i++) {
 
 			ReportConfig reportConfig = ReportConfig.builder()
 					.text("text_" + i)
 					.index(i)
+					.updateHash("a")
 					.build();
 
 			reportConfigRepository.save(reportConfig);
 		}
+		
 		
 		//----------------------------------------
 		

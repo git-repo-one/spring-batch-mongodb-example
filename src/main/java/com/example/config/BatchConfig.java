@@ -25,6 +25,8 @@ import com.example.batch.infra.reader.MongoDbCursorItemReader;
 import com.example.batch.reader.ReportConfigFetchCursorStreamForReader;
 import com.example.domain.ReportConfig;
 import com.example.processor.ReportConfigProcessor;
+import com.example.repository.ReportConfigRepository;
+import com.example.writer.UpdateReportConfigWriter;
 
 import lombok.extern.log4j.Log4j2;
 
@@ -47,6 +49,9 @@ public class BatchConfig {
 
 	@Autowired
 	private MongoTemplate mongoTemplate;
+	
+	@Autowired
+	private ReportConfigRepository reportConfigRepository;
 
 	private ThreadPoolTaskExecutor threadPoolTaskExecutor;
 
@@ -90,12 +95,19 @@ public class BatchConfig {
 	//#. Item Writer
 	@Bean
 	public ItemWriter<ReportConfig> writer(){
-
+		/*
 		MongoItemWriter<ReportConfig> writer= new MongoItemWriter<>();
 
 		writer.setTemplate(mongoTemplate);
 		writer.setCollection("report_config");
 
+		return writer;
+		*/
+		
+		UpdateReportConfigWriter writer= UpdateReportConfigWriter.builder()
+		.reportConfigRepository(reportConfigRepository)
+		.build();
+		
 		return writer;
 	}
 
