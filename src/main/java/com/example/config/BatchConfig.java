@@ -26,6 +26,8 @@ import com.example.reader.ReportConfigCursorItemReader;
 import com.example.writer.ReportConfigItemWriter;
 
 import lombok.extern.log4j.Log4j2;
+import net.javacrumbs.shedlock.core.LockProvider;
+import net.javacrumbs.shedlock.provider.mongo.MongoLockProvider;
 
 @EnableBatchProcessing
 @Configuration
@@ -127,5 +129,12 @@ public class BatchConfig {
 				.incrementer(new RunIdIncrementer())
 				.start(stepA())
 				.build();
+	}
+
+	// to create the shedLock collection
+	@Bean
+	public LockProvider lockProvider() {
+
+		return new MongoLockProvider(mongoTemplate.getDb());
 	}
 }
