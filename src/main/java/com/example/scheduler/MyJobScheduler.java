@@ -32,7 +32,7 @@ public class MyJobScheduler {
 	@SchedulerLock(name = "jobA", lockAtMostFor = "50s", lockAtLeastFor = "30s")
 	public void cronJob() {
 
-		log.debug("inside cronJob()");
+		log.debug("start cronJob()");
 
 		// To assert that the lock is held (prevents misconfiguration errors)
 		LockAssert.assertLocked();
@@ -67,5 +67,7 @@ public class MyJobScheduler {
 		} catch (Exception e) {
 			log.error("fail to run job", e);
 		}
+		
+		log.debug("end cronJob()");
 	}
 }
