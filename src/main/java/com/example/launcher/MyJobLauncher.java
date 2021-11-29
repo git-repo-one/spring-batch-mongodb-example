@@ -32,8 +32,8 @@ public class MyJobLauncher implements CommandLineRunner {
 		//----------------------------------------
 		
 		// 2. insert data
-		//for (int i = 1 ; i <= 50 ; i++) {
-		for (int i = 17 ; i <= 18 ; i++) {
+		for (int i = 1 ; i <= 50 ; i++) {
+		//for (int i = 17 ; i <= 18 ; i++) {
 
 			ReportConfig reportConfig = ReportConfig.builder()
 					.text("text_" + i)
@@ -44,7 +44,6 @@ public class MyJobLauncher implements CommandLineRunner {
 			reportConfigRepository.save(reportConfig);
 		}
 		
-		System.exit(0);
 		//----------------------------------------
 		
 		// 3. run job
