@@ -12,7 +12,6 @@ import org.springframework.batch.core.launch.support.RunIdIncrementer;
 import org.springframework.batch.item.ItemProcessor;
 import org.springframework.batch.item.ItemReader;
 import org.springframework.batch.item.ItemWriter;
-import org.springframework.batch.item.data.MongoItemWriter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -21,12 +20,10 @@ import org.springframework.core.task.TaskExecutor;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 
-import com.example.batch.infra.reader.MongoDbCursorItemReader;
-import com.example.batch.reader.ReportConfigFetchCursorStreamForReader;
 import com.example.domain.ReportConfig;
-import com.example.processor.ReportConfigProcessor;
-import com.example.repository.ReportConfigRepository;
-import com.example.writer.UpdateReportConfigWriter;
+import com.example.processor.ReportConfigItemProcessor;
+import com.example.reader.ReportConfigCursorItemReader;
+import com.example.writer.ReportConfigItemWriter;
 
 import lombok.extern.log4j.Log4j2;
 
@@ -43,15 +40,12 @@ public class BatchConfig {
 
 	@Value("${jobA.chunkSize}")
 	private int chunkSize;
-	
+
 	@Value("${jobA.threadPoolSize}")
 	private int threadPoolSize;
 
 	@Autowired
 	private MongoTemplate mongoTemplate;
-	
-	@Autowired
-	private ReportConfigRepository reportConfigRepository;
 
 	private ThreadPoolTaskExecutor threadPoolTaskExecutor;
 
@@ -73,14 +67,10 @@ public class BatchConfig {
 	@Bean
 	public ItemReader<ReportConfig> reader(){
 
-		MongoDbCursorItemReader<ReportConfig> reader = new MongoDbCursorItemReader<ReportConfig>();
+		ReportConfigCursorItemReader reader = new ReportConfigCursorItemReader();
 
-		reader.setFetchCursorStreamForReader(
-				ReportConfigFetchCursorStreamForReader.builder()
-				.mongoTemplate(mongoTemplate)
-				.batchSize(cursorBatchSize)
-				.build()
-				);
+		reader.setMongoTemplate(mongoTemplate);
+		reader.setBatchSize(cursorBatchSize);
 		reader.setPageSize(pageSize);
 
 		return reader;
@@ -89,25 +79,17 @@ public class BatchConfig {
 	//2. Item Processor
 	@Bean
 	public ItemProcessor<ReportConfig, ReportConfig> processor(){
-		return new ReportConfigProcessor();
+		return new ReportConfigItemProcessor();
 	}
 
 	//#. Item Writer
 	@Bean
 	public ItemWriter<ReportConfig> writer(){
-		/*
-		MongoItemWriter<ReportConfig> writer= new MongoItemWriter<>();
 
-		writer.setTemplate(mongoTemplate);
-		writer.setCollection("report_config");
+		ReportConfigItemWriter writer= ReportConfigItemWriter.builder()
+				.mongoTemplate(mongoTemplate)
+				.build();
 
-		return writer;
-		*/
-		
-		UpdateReportConfigWriter writer= UpdateReportConfigWriter.builder()
-		.reportConfigRepository(reportConfigRepository)
-		.build();
-		
 		return writer;
 	}
 

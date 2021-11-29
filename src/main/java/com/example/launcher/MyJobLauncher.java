@@ -44,7 +44,7 @@ public class MyJobLauncher implements CommandLineRunner {
 			reportConfigRepository.save(reportConfig);
 		}
 		
-		
+		System.exit(0);
 		//----------------------------------------
 		
 		// 3. run job
